@@ -1,0 +1,103 @@
+/* SpeechWriter AI — premium light theme. */
+:root {
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --ink: #1a1d23;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --accent: #b45309;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(180, 83, 9, 0.08);
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.08);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.hero { text-align: center; padding: 3rem 1.25rem 1.5rem; max-width: 720px; margin: 0 auto; }
+.hero h1 { margin: 0; font-size: 1.9rem; font-weight: 700; letter-spacing: -0.02em; }
+.tagline { color: var(--muted); margin: 0.5rem 0 0; font-size: 1.05rem; }
+main { max-width: 760px; margin: 0 auto; padding: 0 1.25rem 4rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 1.75rem;
+  margin: 1.25rem 0;
+}
+.card h2 { margin: 0 0 1rem; font-size: 1.2rem; font-weight: 650; letter-spacing: -0.01em; }
+.card h3 { font-size: 1rem; font-weight: 600; color: var(--ink); margin: 1.25rem 0 0.5rem; }
+.hidden { display: none; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.92rem; font-weight: 500; }
+input, select, textarea {
+  background: #fff; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 0.65rem 0.85rem; font-size: 1rem; font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+textarea { resize: vertical; min-height: 3.5rem; }
+button {
+  background: #fff; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 0.65rem 1.2rem; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; box-shadow: var(--shadow);
+  transition: transform 0.05s, box-shadow 0.15s, background 0.15s;
+}
+button:hover { box-shadow: 0 2px 6px rgba(16, 24, 40, 0.1); }
+button:active { transform: translateY(1px); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+button.primary:hover { background: #9a4a08; }
+.row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.1rem; align-items: center; }
+.muted { color: var(--muted); font-size: 0.88rem; font-weight: 400; }
+.error { color: #b42318; font-size: 0.92rem; }
+.speech { background: #fbfaf8; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
+.speech p { margin: 0.55rem 0; }
+.part-label {
+  color: var(--accent); text-transform: uppercase; letter-spacing: 0.09em;
+  font-size: 0.75rem; font-weight: 700; margin: 1.25rem 0 0.25rem !important;
+}
+.part-label:first-child { margin-top: 0 !important; }
+.toast { font-size: 1.2rem; text-align: center; margin-top: 1.4rem !important; font-weight: 600; }
+.tips { margin: 0; padding-left: 1.25rem; }
+.tips li { margin: 0.55rem 0; }
+.checklist { list-style: none; padding: 0; margin: 0; }
+.checklist li { margin: 0.35rem 0; }
+.checklist label {
+  flex-direction: row; align-items: flex-start; gap: 0.7rem; cursor: pointer;
+  padding: 0.6rem 0.75rem; border-radius: 10px; font-weight: 400;
+}
+.checklist label:hover { background: var(--accent-soft); }
+.checklist input[type="checkbox"] { width: 1.1rem; height: 1.1rem; margin-top: 0.2rem; accent-color: var(--accent); padding: 0; }
+.saved { list-style: none; padding: 0; margin: 0; }
+.saved li {
+  display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;
+  padding: 0.7rem 0; border-bottom: 1px solid var(--line);
+}
+.saved li:last-child { border-bottom: 0; }
+.saved button { padding: 0.35rem 0.8rem; font-size: 0.85rem; box-shadow: none; }
+#storyPrompts label { margin: 0.9rem 0; }
+#storyPrompts .muted { font-weight: 400; }
+footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding-bottom: 2.5rem; }
+@media print {
+  .hero, .row, button, #builder, #delivery, #practice, #saved, #aiBox, footer { display: none; }
+  body { background: #fff; }
+  .card { border: 0; box-shadow: none; }
+}
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 1.25rem; }
+  .hero { padding: 2rem 1.25rem 1rem; }
+  .hero h1 { font-size: 1.6rem; }
+}
