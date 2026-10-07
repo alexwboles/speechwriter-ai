@@ -15,7 +15,7 @@
   --accent-soft: #faf3e3;
   --accent-line: #e5c878;
   --curtain: #241c12;
-  --radius: 14px;
+  --radius: 0;
   --shadow: 0 1px 2px rgba(38, 33, 26, .07), 0 12px 32px rgba(38, 33, 26, .08);
   --serif: Georgia, "Times New Roman", serif;
   --display: "Playfair Display", Georgia, serif;
@@ -43,7 +43,7 @@ h3 { font-size: 15px; margin: 22px 0 8px; }
 .hero h1 { font-size: clamp(30px, 5vw, 44px); margin: 0 0 8px; color: #fdf6e7; }
 .hero h1::before {
   content: ""; display: block; width: 44px; height: 3px; background: var(--accent);
-  border-radius: 2px; margin: 0 auto 16px;
+  border-radius: 0; margin: 0 auto 16px;
 }
 .tagline { color: #cbb98f; font-size: 16px; margin: 0; font-style: italic; font-family: var(--serif); }
 
@@ -63,7 +63,7 @@ label { display: block; font-size: 13.5px; font-weight: 650; color: var(--ink-so
 select, input[type="text"], input[type="password"], textarea {
   display: block; width: 100%; margin-top: 6px; padding: 11px 13px;
   font: inherit; font-size: 14.5px; color: var(--ink);
-  background: #fff; border: 1px solid #d9cdb8; border-radius: 10px;
+  background: #fff; border: 1px solid #d9cdb8; border-radius: 0;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
 select:focus, input:focus, textarea:focus {
@@ -77,7 +77,7 @@ textarea { resize: vertical; }
 /* ---------- buttons ---------- */
 button {
   font: inherit; font-size: 14px; font-weight: 650; cursor: pointer;
-  padding: 11px 20px; border-radius: 10px; border: 1px solid #d9cdb8;
+  padding: 11px 20px; border-radius: 0; border: 1px solid #d9cdb8;
   background: #fff; color: var(--ink);
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
 }
@@ -91,13 +91,13 @@ button.primary:hover, #draftBtn.primary:hover { background: var(--accent-deep); 
 
 /* ---------- the manuscript ---------- */
 .speech {
-  background: #fffefb; border: 1px solid var(--line); border-radius: 10px;
+  background: #fffefb; border: 1px solid var(--line); border-radius: 0;
   padding: 34px 36px; position: relative;
   box-shadow: inset 0 0 40px rgba(161, 98, 7, .05);
 }
 .speech::before {
   content: ""; position: absolute; inset: 8px; border: 1px solid var(--line-soft);
-  border-radius: 6px; pointer-events: none;
+  border-radius: 0; pointer-events: none;
 }
 .speech p { font-family: var(--serif); font-size: 17px; line-height: 1.75; color: var(--ink); }
 .part-label {
@@ -129,7 +129,7 @@ button.primary:hover, #draftBtn.primary:hover { background: var(--accent-deep); 
 .tips { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .tips li {
   position: relative; padding: 12px 16px 12px 40px; background: var(--accent-soft);
-  border: 1px solid var(--line); border-radius: 10px; font-size: 14px;
+  border: 1px solid var(--line); border-radius: 0; font-size: 14px;
 }
 .tips li::before {
   content: ""; position: absolute; left: 16px; top: 50%;
@@ -138,7 +138,7 @@ button.primary:hover, #draftBtn.primary:hover { background: var(--accent-deep); 
 .checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .checklist li label {
   display: flex; align-items: center; gap: 12px; padding: 11px 14px;
-  border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-weight: 500;
+  border: 1px solid var(--line); border-radius: 0; cursor: pointer; font-weight: 500;
   transition: background .12s ease, border-color .12s ease;
 }
 .checklist li label:hover { background: var(--accent-soft); border-color: var(--accent-line); }
@@ -149,7 +149,7 @@ button.primary:hover, #draftBtn.primary:hover { background: var(--accent-deep); 
 .saved { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .saved li {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  padding: 12px 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff;
+  padding: 12px 16px; border: 1px solid var(--line); border-radius: 0; background: #fff;
 }
 .saved li strong { font-family: var(--display); font-size: 16px; }
 .saved li button { padding: 7px 14px; font-size: 13px; margin-left: auto; }
