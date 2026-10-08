@@ -11,6 +11,11 @@ Everyone dreads the wedding toast, the retirement speech, the eulogy. Blank-page
 3. **3 story-beat prompts** — specific questions with hints, because one concrete memory beats a biography
 4. **Toast lines** — a clean closer for raising the glass
 5. **Timing estimate** — word count → spoken minutes at ~130 wpm, so you don't run long
+6. **Where-the-time-goes breakdown** — per-section word counts and minutes, with your longest section flagged (your best "cut 10%" candidate)
+7. **Over-length warning** — flags drafts above the occasion's word ceiling before you practice them too long
+8. **Cue cards** — one printable card per beat (opening / 3 stories / closing / toast) for the podium; print CSS prints only the cards
+9. **Markdown export** — download any draft as a portable `.md` file
+10. **Saved-speech search** — find drafts by name, occasion, tone, or story text
 6. **Practice checklist** — write it out, read aloud 3×, cut 10%, cue cards… with progress saved
 7. **Optional AI polish** — paste your own OpenAI API key for a rewrite in your voice (never required)
 

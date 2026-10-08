@@ -70,7 +70,29 @@
     $("outClosing").textContent = currentSpeech.closing;
     $("outToast").textContent = currentSpeech.toast;
     $("metaLine").textContent = "· " + wc + " words · " + est.rangeLabel + " spoken";
+
+    // length guidance: warn when the draft is over the occasion's target
+    const guide = lengthGuidance(currentSpeech.occasion, wc);
+    const lw = $("lengthWarn");
+    if (guide.over) {
+      lw.classList.remove("hidden");
+      lw.textContent = "Over target: " + guide.overBy + " words above the ~" + guide.limit +
+        "-word ceiling for a " + currentSpeech.occasion + " speech. Consider the 'Cut 10%' practice step — your longest beat is the best place to trim.";
+    } else {
+      lw.classList.add("hidden");
+      lw.textContent = "";
+    }
+
+    // per-section timing breakdown — see where the minutes go
+    const secs = sectionMinutes(currentSpeech);
+    const longest = secs.reduce((a, b) => (b.words > a.words ? b : a), secs[0]);
+    $("timingBox").innerHTML = "<h3>Where the time goes</h3>" + secs.map((s) =>
+      "<div class='trow" + (s === longest ? " longest" : "") + "'><span>" + escapeHtml(s.label) +
+      (s === longest ? " · longest" : "") + "</span><span>" + s.words + " words · " +
+      s.minutes.toFixed(1) + " min</span></div>").join("");
+
     $("result").classList.remove("hidden");
+    $("cueSheet").classList.add("hidden");
     $("result").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -93,11 +115,15 @@
 
   function renderSaved() {
     const all = loadJSON(LS_SPEECHES, []);
-    $("savedList").innerHTML = all.length ? all.map((s, i) =>
+    const q = ($("savedSearch") && $("savedSearch").value || "").trim().toLowerCase();
+    const shown = all
+      .map((s, idx) => ({ s, idx }))
+      .filter(({ s }) => !q || (s.name + " " + s.occasion + " " + s.tone + " " + (s.stories || []).join(" ")).toLowerCase().includes(q));
+    $("savedList").innerHTML = shown.length ? shown.map(({ s, idx }) =>
       "<li><strong>" + escapeHtml(s.name) + "</strong> <span class='muted'>" +
       (OCCASIONS[s.occasion] ? OCCASIONS[s.occasion].label : s.occasion) + " · " + s.words + " words</span> " +
-      "<button data-load='" + i + "'>Load</button> <button data-del='" + i + "'>✕</button></li>").join("")
-      : "<li class='muted'>No saved speeches yet.</li>";
+      "<button data-load='" + idx + "'>Load</button> <button data-del='" + idx + "'>✕</button></li>").join("")
+      : (all.length ? "<li class='muted'>No saved speeches match your search.</li>" : "<li class='muted'>No saved speeches yet.</li>");
     $("savedList").querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => {
       const a = loadJSON(LS_SPEECHES, []); a.splice(+b.dataset.del, 1); saveJSON(LS_SPEECHES, a); renderSaved();
     }));
@@ -111,10 +137,37 @@
     }));
   }
 
+  function downloadText(filename, text, mime) {
+    const blob = new Blob([text], { type: mime || "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+
+  /** One cue card per section: a memory-jog, not a script to read. */
+  function renderCueCards() {
+    const cards = [
+      { head: "OPENING", body: currentSpeech.opening },
+      ...currentSpeech.beats.map((b, i) => ({
+        head: "STORY " + (i + 1) + " — " + b.prompt,
+        body: b.text ? (b.text.length > 160 ? b.text.slice(0, 157).trim() + "…" : b.text) : "(tell it your way)"
+      })),
+      { head: "CLOSING", body: currentSpeech.closing },
+      { head: "TOAST LINE", body: currentSpeech.toast }
+    ];
+    $("cueCards").innerHTML = cards.map((c, i) =>
+      "<div class='cue-card'><div class='cue-num'>" + (i + 1) + "</div>" +
+      "<div class='cue-head'>" + escapeHtml(c.head) + "</div>" +
+      "<p>" + escapeHtml(c.body) + "</p></div>").join("");
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     initSelectors(); renderChecklist(); renderSaved();
     $("draftBtn").addEventListener("click", () => draft());
     $("shuffleBtn").addEventListener("click", () => draft());
+    $("savedSearch").addEventListener("input", renderSaved);
     $("copyBtn").addEventListener("click", async () => {
       try { await navigator.clipboard.writeText(currentText); $("copyMsg").textContent = "Copied!"; }
       catch { $("copyMsg").textContent = "Copy blocked by browser — select the text manually."; }
@@ -129,6 +182,27 @@
       });
       saveJSON(LS_SPEECHES, all.slice(0, 20)); renderSaved();
       $("copyMsg").textContent = "Saved.";
+    });
+    $("mdBtn").addEventListener("click", () => {
+      if (!currentSpeech) return;
+      const slug = ($("name").value.trim() || "speech").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      downloadText(slug + "-speech.md", speechToMarkdown(currentSpeech), "text/markdown;charset=utf-8");
+      $("copyMsg").textContent = "Downloaded as Markdown.";
+    });
+    $("cueBtn").addEventListener("click", () => {
+      if (!currentSpeech) return;
+      renderCueCards();
+      $("cueSheet").classList.remove("hidden");
+      $("cueSheet").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    $("closeCueBtn").addEventListener("click", () => {
+      $("cueSheet").classList.add("hidden");
+      $("result").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    $("printCueBtn").addEventListener("click", () => {
+      document.body.classList.add("printing-cues");
+      window.print();
+      setTimeout(() => document.body.classList.remove("printing-cues"), 500);
     });
     $("polishBtn").addEventListener("click", async () => {
       const key = $("apiKey").value.trim();

@@ -72,5 +72,36 @@ flow "relNoun maps common relationships with articles" "
   if(!L.fill('I am {relNoun} of {name}.',{relNoun:'a brother',name:'Kim'}).includes('a brother of Kim')) throw new Error('fill');
 "
 
+flow "markdown export survives copy: all beats + toast present" "
+  const L=require('./js/logic.js'); const B=require('./js/speechbank.js');
+  const s=L.buildSpeech({occasion:'wedding',name:'Maya',relationship:'sister',tone:'heartfelt',partner:'Jordan',stories:['story one here','story two here','story three here'],variant:1},B);
+  const md=L.speechToMarkdown(s);
+  const txt=L.renderText(s);
+  if(!md.includes(s.opening)||!md.includes(s.closing)||!md.includes(s.toast)) throw new Error('sections lost');
+  if(!md.includes('story two here')) throw new Error('beat text lost');
+  if(L.wordCount(md)<L.wordCount(txt)*0.9) throw new Error('markdown lost words');
+"
+
+flow "longest section is identifiable for the cut-10-percent step" "
+  const L=require('./js/logic.js'); const B=require('./js/speechbank.js');
+  const longStory='word '.repeat(60).trim();
+  const s=L.buildSpeech({occasion:'birthday',name:'Sam',relationship:'friend',tone:'funny',
+    stories:['short','tiny',longStory],variant:0},B);
+  const secs=L.sectionMinutes(s);
+  const longest=secs.reduce((a,b)=>b.words>a.words?b:a);
+  if(longest.label!=='Story 3') throw new Error('longest='+longest.label);
+  if(longest.words<50) throw new Error('words='+longest.words);
+"
+
+flow "every occasion has a sensible word limit" "
+  const L=require('./js/logic.js'); const B=require('./js/speechbank.js');
+  for(const occ of Object.keys(B.OCCASIONS)){
+    const lim=L.OCCASION_WORD_LIMITS[occ];
+    if(!lim||lim<200||lim>1200) throw new Error(occ+' limit='+lim);
+  }
+  const g=L.lengthGuidance('eulogy',900);
+  if(g.limit!==910||g.over) throw new Error('eulogy 900 should be under 910');
+"
+
 echo "--- e2e: $pass passed, $fail failed ---"
 exit $((fail>0))

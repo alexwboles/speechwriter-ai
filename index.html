@@ -45,6 +45,7 @@
 
   <section class="card hidden" id="result">
     <h2>2 · Your speech <span id="metaLine" class="muted"></span></h2>
+    <div id="lengthWarn" class="length-warn hidden"></div>
     <div class="speech">
       <p class="part-label">Opening</p>
       <p id="outOpening"></p>
@@ -53,11 +54,23 @@
       <p id="outClosing"></p>
       <p class="toast" id="outToast"></p>
     </div>
+    <div id="timingBox" class="timing"></div>
     <div class="row">
       <button id="copyBtn">Copy full text</button>
       <button id="saveBtn">Save speech</button>
+      <button id="mdBtn">Download .md</button>
+      <button id="cueBtn">Cue cards</button>
     </div>
     <p id="copyMsg" class="muted"></p>
+  </section>
+
+  <section class="card hidden" id="cueSheet">
+    <h2>Cue cards <span class="muted">— one card per beat, print and hold</span></h2>
+    <div id="cueCards" class="cues"></div>
+    <div class="row no-print">
+      <button id="printCueBtn" class="primary">Print cue cards</button>
+      <button id="closeCueBtn">Back to speech</button>
+    </div>
   </section>
 
   <section class="card" id="delivery">
@@ -73,6 +86,7 @@
 
   <section class="card" id="saved">
     <h2>Saved speeches</h2>
+    <input id="savedSearch" type="search" placeholder="Search saved speeches…" aria-label="Search saved speeches" class="saved-search">
     <ul id="savedList" class="saved"></ul>
   </section>
 

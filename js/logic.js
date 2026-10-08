@@ -84,6 +84,43 @@ function estimateMinutes(words) {
   return { minutes: mins, words, rangeLabel: mins < 2 ? "under 2 min" : "about " + Math.round(mins) + " min" };
 }
 
+/** Per-occasion word-count ceilings, from the delivery tips in the bank. */
+const OCCASION_WORD_LIMITS = {
+  wedding: 650, birthday: 520, retirement: 650, graduation: 390, eulogy: 910
+};
+
+/** Is this draft over its occasion's target length? */
+function lengthGuidance(occasion, words) {
+  const limit = OCCASION_WORD_LIMITS[occasion] || 650;
+  return { words, limit, over: words > limit, overBy: Math.max(0, words - limit) };
+}
+
+/** Per-section word counts and spoken minutes — shows where the time goes. */
+function sectionMinutes(speech) {
+  const secs = [{ label: "Opening", text: speech.opening }];
+  speech.beats.forEach((b, i) => secs.push({ label: "Story " + (i + 1), text: b.text }));
+  secs.push({ label: "Closing", text: speech.closing });
+  secs.push({ label: "Toast", text: speech.toast });
+  return secs.map((s) => {
+    const w = wordCount(s.text);
+    return { label: s.label, words: w, minutes: w / 130 };
+  });
+}
+
+/** Portable Markdown rendering of a built speech. */
+function speechToMarkdown(speech) {
+  const lines = [
+    "# " + speech.occasion.charAt(0).toUpperCase() + speech.occasion.slice(1) +
+      " speech — " + speech.tone,
+    "", "## Opening", "", speech.opening, ""
+  ];
+  speech.beats.forEach((b, i) => {
+    lines.push("## Story " + (i + 1) + " — " + b.prompt, "", b.text || "(add your story here)", "");
+  });
+  lines.push("## Closing", "", speech.closing, "", "## Toast", "", speech.toast, "");
+  return lines.join("\n");
+}
+
 /** Generic practice checklist, with occasion-specific extras. */
 function practiceChecklist(occasion) {
   const base = [
@@ -100,5 +137,5 @@ function practiceChecklist(occasion) {
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { fill, relNoun, validateInput, buildSpeech, renderText, wordCount, estimateMinutes, practiceChecklist };
+  module.exports = { fill, relNoun, validateInput, buildSpeech, renderText, wordCount, estimateMinutes, practiceChecklist, lengthGuidance, sectionMinutes, speechToMarkdown, OCCASION_WORD_LIMITS };
 }
